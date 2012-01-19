@@ -1,0 +1,86 @@
+
+/*=====================================
+  WALL Post Container
+  Comprised of a few elements --
+   Parent Container -> PostWrapper
+    Child -> Header W/ image -> body text 
+      Child->Replies -> replyHeader  / ReplyBody / ReplyAvatar
+      Child-> Post -> Input box w/ submit button
+ ========================================== */
+
+/* css hack to clear floats */
+.clear {
+  clear: both;
+}
+
+
+/* The main wrapper for all of the wall posts -- 500px */
+#WallContainer {
+    width: 500px;
+    float: left;
+    padding: 5px 5px 5px 5px;
+    border-radius: 15px;
+   -moz-border-radius: 15px;
+   -webkit-border-radius: 15px;
+    background-color: #cccccc;  
+ }
+ 
+.post-wrapper {
+  width: 430px;
+  padding: 5px 5px 5px 5px;       
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.post-wrapper .post-header {
+  font-size: 1.25em;
+  font-family: helvetica, arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 0px 2px 3px #555;
+  color: #000;
+  width: 430px;
+  padding-bottom: 2px;
+  padding-left: 10px;
+}
+
+.post-wrapper .post-body {
+  font-size: 1em;
+  font-family: helvetica, arial, sans-serif;
+  color: #000;
+  padding-top: 25px;
+  background-color: #fff;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+}
+
+.post-wrapper .post-body img {
+  float: left;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  padding-left: 15px;
+  border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+}
+
+
+.post-wrapper .post-reply-wrapper {
+  padding-left: 50px;
+}
+
+.post-wrapper .post-reply-wrapper .reply-body {
+  font-size: 1em;
+  font-family: helvetica, arial, sans-serif;
+  margin-left: 20px;
+  background-color: #fff;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+}
+
