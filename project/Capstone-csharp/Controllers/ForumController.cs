@@ -29,7 +29,7 @@ namespace Capstone_csharp.Controllers
             {
                 
 
-                // Pull the parent posts
+                // Pull the parent posts using Linq
                 var parentPosts = from post in db.tTopicPosts
                                   where post.topicParentID == null
                                   select new Models.PostModel
@@ -43,21 +43,30 @@ namespace Capstone_csharp.Controllers
 
                 // using the json logic from
                 // http://stackoverflow.com/questions/5978904/how-to-build-object-hierarchy-for-serialization-with-json-net
+                // build a list to hold all of the post objects
                 var jsonPosts = new List<object>();
+
+                // Iterate through each post - and build an object that we can serialize to JSON
                 foreach (var post in parentPosts)
                 {
+                    // Declare it as a temporary post - not very memory efficient but it works
                     var tempPost = new
                     {
+                        // Set each property - since this is an anonymous object, we could be arbitrary
+                        // with the property names - but lets be intelligent here
                         post.postID, // anonymous properties gain the name of the 'host' object
                         postDate = post.postDate,
                         postedBy = post.postedBy,
                         postTitle = post.postTopic,
                         postBody = post.postBody,
-                        Replys = new List<object>()
+                        Replys = new List<object>() // important - notice how its a list of object?
                     };
 
+                    // lets use the prior list now - pull the replys we want to populate it with
                     var replys = from reply in db.tTopicPosts
                                  where reply.topicParentID == post.postID
+                                 // remember that whole list of object thing above?
+                                 // we can be arbitrary here too - lets not get funky tho
                                  select new
                                  {
                                      postID = reply.topicPostID,
@@ -65,37 +74,19 @@ namespace Capstone_csharp.Controllers
                                      postTitle = reply.topicTitle,
                                      postBody = reply.topicPost
                                  };
+                    // Now ITERATE ALL THE THINGS AGAIN!!
                     foreach (var reply in replys)
                     {
+                        // add it to the temporary post object
                         tempPost.Replys.Add(reply);
                     }
 
+                    // add it to the parent list 
                     jsonPosts.Add(tempPost);
   
                 }
 
-                // legacy code - left for learning purposes
-
-                //List<JObject> postJSON = new List<JObject>();
-                //foreach (var post in parentPosts)
-                //{
-                //    JObject pjson = new JObject(
-                //            new JProperty("PostID", post.postID),
-                //            new JProperty("PostDate", post.postDate.ToString()),
-                //            new JProperty("PostedBY:", post.postedBy),
-                //            new JProperty("PostTitle", post.postTopic),
-                //            new JProperty("PostBody", post.postBody),
-                //            new JProperty("Replys",
-                //            new JArray(
-                //                new JObject(new JProperty("Reply", "test"
-                //                //from reply in db.tTopicPosts
-                //                //where reply.topicParentID == post.postID
-                //                //select new Models.ReplyModel { postID = reply.topicPostID, postDate = reply.topicDate, postBody = reply.topicPost }
-                //                )))));
-
-                //    postJSON.Add(pjson);
-                //}
-
+                // serialize it and return it.
                 return Json(Newtonsoft.Json.JsonConvert.SerializeObject(jsonPosts), JsonRequestBehavior.AllowGet);
                 
             } // close DB connection
