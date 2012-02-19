@@ -30,6 +30,10 @@ namespace Capstone_csharp.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, model.Password))
                 {
+                    // Aesthetic stuff - be somewhat frugal with cookies please.
+                    Response.Cookies["Username"].Value = model.UserName;
+                    Response.Cookies["Username"].Expires = DateTime.Now.AddHours(5);
+
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
