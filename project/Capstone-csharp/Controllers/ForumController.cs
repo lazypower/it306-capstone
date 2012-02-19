@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using System.Web.Script.Serialization;
 
 namespace Capstone_csharp.Controllers
 {
@@ -40,27 +41,62 @@ namespace Capstone_csharp.Controllers
                                       postBody = post.topicPost
                                   };
 
-                List<JObject> postJSON = new List<JObject>();
+                // using the json logic from
+                // http://stackoverflow.com/questions/5978904/how-to-build-object-hierarchy-for-serialization-with-json-net
+                var jsonPosts = new List<object>();
                 foreach (var post in parentPosts)
                 {
-                    JObject pjson = new JObject(
-                            new JProperty("PostID", post.postID),
-                            new JProperty("PostDate", post.postDate.ToString()),
-                            new JProperty("PostedBY:", post.postedBy),
-                            new JProperty("PostTitle", post.postTopic),
-                            new JProperty("PostBody", post.postBody),
-                            new JProperty("Replys",
-                            new JArray(
-                                new JObject(new JProperty("Reply", "test"
-                                //from reply in db.tTopicPosts
-                                //where reply.topicParentID == post.postID
-                                //select new Models.ReplyModel { postID = reply.topicPostID, postDate = reply.topicDate, postBody = reply.topicPost }
-                                )))));
+                    var tempPost = new
+                    {
+                        post.postID, // anonymous properties gain the name of the 'host' object
+                        postDate = post.postDate,
+                        postedBy = post.postedBy,
+                        postTitle = post.postTopic,
+                        postBody = post.postBody,
+                        Replys = new List<object>()
+                    };
 
-                    postJSON.Add(pjson);
+                    var replys = from reply in db.tTopicPosts
+                                 where reply.topicParentID == post.postID
+                                 select new
+                                 {
+                                     postID = reply.topicPostID,
+                                     postDate = reply.topicDate,
+                                     postTitle = reply.topicTitle,
+                                     postBody = reply.topicPost
+                                 };
+                    foreach (var reply in replys)
+                    {
+                        tempPost.Replys.Add(reply);
+                    }
+
+                    jsonPosts.Add(tempPost);
+  
                 }
 
-                return Json(Newtonsoft.Json.JsonConvert.SerializeObject(postJSON), JsonRequestBehavior.AllowGet);
+                // legacy code - left for learning purposes
+
+                //List<JObject> postJSON = new List<JObject>();
+                //foreach (var post in parentPosts)
+                //{
+                //    JObject pjson = new JObject(
+                //            new JProperty("PostID", post.postID),
+                //            new JProperty("PostDate", post.postDate.ToString()),
+                //            new JProperty("PostedBY:", post.postedBy),
+                //            new JProperty("PostTitle", post.postTopic),
+                //            new JProperty("PostBody", post.postBody),
+                //            new JProperty("Replys",
+                //            new JArray(
+                //                new JObject(new JProperty("Reply", "test"
+                //                //from reply in db.tTopicPosts
+                //                //where reply.topicParentID == post.postID
+                //                //select new Models.ReplyModel { postID = reply.topicPostID, postDate = reply.topicDate, postBody = reply.topicPost }
+                //                )))));
+
+                //    postJSON.Add(pjson);
+                //}
+
+                return Json(Newtonsoft.Json.JsonConvert.SerializeObject(jsonPosts), JsonRequestBehavior.AllowGet);
                 
             } // close DB connection
         
