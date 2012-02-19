@@ -1,0 +1,39 @@
+﻿using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+
+namespace Capstone_csharp.Models
+{
+    public class PostModel
+    {
+        // Implement DataMembers for serialization purposes - LINQ is a fuckwad sometimes
+
+        [DataMember]
+        public int postID { get; set; }
+
+        [DataMember]
+        public int postedBy { get; set; }
+
+        [DataMember]
+        public string postTopic { get; set; }
+
+        [DataMember]
+        public string postBody { get; set; }
+
+        [DataMember]
+        public DateTime postDate { get; set; }
+
+        [DataMember]
+        public int parentID { get; set; }
+
+        [DataMember]
+        public IEnumerable<PostModel> replys { get; set; }
+      
+
+    }
+
+
+}
