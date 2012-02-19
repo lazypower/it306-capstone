@@ -31,8 +31,8 @@ namespace Capstone_csharp.Controllers
 
                 // Pull the parent posts using Linq
                 var parentPosts = from post in db.tTopicPosts
-                                  where post.topicParentID == null
-                                  select new Models.PostModel
+                                  where post.topicParentID == null // this denotes it is a root-level post. or a Parent post
+                                  select new 
                                   {
                                       postID = post.topicPostID,
                                       postTopic = post.topicTitle,
@@ -56,7 +56,7 @@ namespace Capstone_csharp.Controllers
                         // with the property names - but lets be intelligent here
                         post.postID, // anonymous properties gain the name of the 'host' object
                         postDate = post.postDate,
-                        postedBy = post.postedBy,
+                        postedBy = Helpers.HelperQueries.GetUserName(post.postedBy),
                         postTitle = post.postTopic,
                         postBody = post.postBody,
                         Replys = new List<object>() // important - notice how its a list of object?
@@ -70,6 +70,7 @@ namespace Capstone_csharp.Controllers
                                  select new
                                  {
                                      postID = reply.topicPostID,
+                                     postedBy = reply.userID,
                                      postDate = reply.topicDate,
                                      postTitle = reply.topicTitle,
                                      postBody = reply.topicPost
@@ -77,8 +78,15 @@ namespace Capstone_csharp.Controllers
                     // Now ITERATE ALL THE THINGS AGAIN!!
                     foreach (var reply in replys)
                     {
+                        var tempReply = new
+                            {
+                                postID = reply.postID,
+                                postedBy = Helpers.HelperQueries.GetUserName(reply.postedBy),
+                                postDate = reply.postDate,
+                                postBody = reply.postBody
+                            };
                         // add it to the temporary post object
-                        tempPost.Replys.Add(reply);
+                        tempPost.Replys.Add(tempReply);
                     }
 
                     // add it to the parent list 
