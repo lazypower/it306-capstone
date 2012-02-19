@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Text;
-using System.Web.Script.Serialization;
+
 
 namespace Capstone_csharp.Controllers
 {
@@ -16,8 +16,8 @@ namespace Capstone_csharp.Controllers
 
         public ActionResult Index()
         {
-            throw new NotImplementedException();
-           
+
+            return View();
         }
 
         public ActionResult getPosts()
