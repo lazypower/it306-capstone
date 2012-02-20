@@ -5,15 +5,13 @@
     <title>@ViewBag.Title</title>
     <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.css")" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.cookie.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
 
 </head>
 <body>
     <header>
-        @*<div id="logindisplay">
-            @Html.Partial("_LogOnPartial")
-        </div>*@
         <div class="navbar">
             <div class="navbar-inner">
                 <div class="container">
@@ -31,10 +29,12 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Account <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <div id="loginform">
                                     <form action="/Account/LogOn" method="post">
                                         <input data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" placeholder="UserName" />
                                         <input data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password">
                                         <input type="submit" value="Log On">
+                                    </div>
                                     </form>
                                 </li>
                             </ul>
@@ -54,6 +54,12 @@
 
     <script>
         $('dropdown-toggle').dropdown();
+
+        //inline hack to fix the click event on dropdown
+        $('.dropdown-menu').find('form').click(function (e) {
+            e.stopPropagation();
+        });
+
     </script>
 
 </body>
