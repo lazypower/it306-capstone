@@ -54,9 +54,8 @@ function bindReplyDisplay() {
     }).mouseleave(function () {
         $(this).find('.icon-share-alt').remove();
     });
-
-
 }
+
 
 
 // Consider this the constructor - run on page load
