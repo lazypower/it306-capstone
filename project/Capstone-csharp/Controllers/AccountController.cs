@@ -60,6 +60,14 @@ namespace Capstone_csharp.Controllers
 
         public ActionResult LogOff()
         {
+            // Clear the Aesthetic cookie - so proper display items are shown.
+            if (Request.Cookies["Username"] != null)
+            {
+                var c = new HttpCookie("Username");
+                c.Expires = DateTime.Now.AddHours(-1);
+                Response.Cookies.Add(c);
+            }
+
             FormsAuthentication.SignOut();
 
             return RedirectToAction("Index", "Home");
@@ -87,6 +95,10 @@ namespace Capstone_csharp.Controllers
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
+                    // Aesthetic stuff - be somewhat frugal with cookies please.
+                    Response.Cookies["Username"].Value = model.UserName;
+                    Response.Cookies["Username"].Expires = DateTime.Now.AddHours(5);
+
                     FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }
