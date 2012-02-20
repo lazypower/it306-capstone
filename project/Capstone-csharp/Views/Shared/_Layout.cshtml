@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
-    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
 
@@ -63,6 +63,30 @@
     </section>
     <footer>
     </footer>
+
+
+    <section id="dialogs">
+        <div class="modal fade" id="ieModal">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">x</a>
+                <h3>UNSUPPORTED BROWSER</h3>
+            </div>
+            <div class="modal-body">
+                <p>You really should ditch that legacy browser and take advantage of the web's latest and greatest features. Find a fully HTML5 compliant browser with <a href="http://www.getfirefox.com">Firefox</a> or <a href="http://chrome.google.com">Chrome</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        $('document').ready(function () {
+            if ($.browser.msie != undefined) {
+                $('#ieModal').modal({
+                    backdrop: true,
+                    keyboard: false
+                });
+            }
+        });
+    </script>
 
     @Html.Assets().Scripts.Render()
 </body>
