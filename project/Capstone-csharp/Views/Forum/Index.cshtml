@@ -1,1 +1,56 @@
-﻿
+﻿@{
+    ViewBag.Title = "Forums";
+    Html.Assets().Scripts.Add("/Scripts/ForumFunctions.js");
+}
+
+<h2>Forums</h2>
+<section id="tabs">
+    <div class="pull-right span12" id="writerBox">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#search" data-toggle="tab"><i class="icon-search"></i>Search</a></li>
+            <li><a href="#write" data-toggle="tab"><i class="icon-pencil"></i>Compose</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" data-target="search" id="search">
+                <div class="input-prepend"><span class="add-on"><i class="icon-search"></i></span><input class="span2" id="tagsearch" type="text" /></div>
+            </div>
+            <div class="tab-pane" id="write" data-target="write">
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">Title:</label> 
+                    <div class="controls">
+                        <input type="text" class="span2" name="postTitle" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">PostBody:</label> 
+                    <div class="controls">
+                        <textarea rows="5" cols="5" name="postBody"></textarea>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>    $('#tabs').tab('show');</script>
+<div class="span8" id="datastream"> 
+
+</div>
+
+
+<!-- I dont like to do this - but I need to - drop the script in the middle of page to provide all page functions -->
+<style type="text/css">
+    .postcontainer 
+    {
+        margin-bottom: 20px;
+    }
+    .reply
+    {
+        margin-bottom: 10px;
+    }
+
+</style>
+
+
