@@ -23,19 +23,25 @@
                         <li class="divider-vertical"></li>
                         <li>@Html.ActionLink("Schedule", "Index", "Schedule")</li>
                         <li class="divider-vertical"></li>
+                        <li>@Html.ActionLink("About Us", "About", "Home")</li>
+                        <li class="divider-vertical"></li>
                         </ul>
                         <ul class="nav pull-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Account <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="AccountLeader"> Account <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li>
+                                <li id="Account-item1">
                                     <div id="loginform">
                                     <form action="/Account/LogOn" method="post">
+                                        <label for="UserName">UserName</label>
                                         <input data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" placeholder="UserName" />
+                                        <label for="Password">Password</label>
                                         <input data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password">
-                                        <input type="submit" value="Log On">
-                                    </div>
+                                        <input type="submit" class="btn-primary" value="Log On">
+                                        <p class="help-block">Not a member? <a href="/Account/Register" class="help-inline">Register</a></p>
                                     </form>
+                                    
+                                    </div>
                                 </li>
                             </ul>
                         </li>
@@ -55,10 +61,21 @@
     <script>
         $('dropdown-toggle').dropdown();
 
-        //inline hack to fix the click event on dropdown
+        //inline hack to fix the click event on dropdown when it contains a form
+        // Thank you stackoverflow 
         $('.dropdown-menu').find('form').click(function (e) {
             e.stopPropagation();
         });
+
+        // Script to remove the form if the user has logged in
+        if ($.cookie("Username") != null) {
+            $('#Account-item1').children().remove();
+            $('#AccountLeader').html($.cookie("Username") + " <b class='caret'></b> ");
+            $('#Account-item1').append('<a href="/Account/ChangePassword">Change Password</a>');
+            $('#Account-item1').append('<a href="/Account/Logoff">Log Out</a>');
+        }
+        
+       
 
     </script>
 
