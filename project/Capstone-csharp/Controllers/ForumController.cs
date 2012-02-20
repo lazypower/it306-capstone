@@ -16,7 +16,6 @@ namespace Capstone_csharp.Controllers
 
         public ActionResult Index()
         {
-
             return View();
         }
 
@@ -55,7 +54,7 @@ namespace Capstone_csharp.Controllers
                         // Set each property - since this is an anonymous object, we could be arbitrary
                         // with the property names - but lets be intelligent here
                         post.postID, // anonymous properties gain the name of the 'host' object
-                        postDate = post.postDate,
+                        postDate = post.postDate.ToShortDateString() + " @ " + post.postDate.ToShortTimeString(), // by default, dates are serial strings that make no sense - ms from epoch?
                         postedBy = Helpers.HelperQueries.GetUserName(post.postedBy),
                         postTitle = post.postTopic,
                         postBody = post.postBody,
@@ -82,7 +81,7 @@ namespace Capstone_csharp.Controllers
                             {
                                 postID = reply.postID,
                                 postedBy = Helpers.HelperQueries.GetUserName(reply.postedBy),
-                                postDate = reply.postDate,
+                                postDate = reply.postDate.ToShortDateString() + " @ " + reply.postDate.ToShortTimeString(), // by default, dates are serial strings that make no sense - ms from epoch?
                                 postBody = reply.postBody
                             };
                         // add it to the temporary post object
