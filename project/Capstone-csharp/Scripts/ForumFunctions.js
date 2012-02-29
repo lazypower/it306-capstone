@@ -54,6 +54,23 @@ function bindReplyDisplay() {
     }).mouseleave(function () {
         $(this).find('.icon-share-alt').remove();
     });
+
+    $('.postcontainer').click(function () {
+        console.log($(this).find('.replyscontainer').find('#ReplyBox').length);
+
+        if ($('#ReplyBox').length > 0) {
+
+        } else {
+            $(this).find('.replyscontainer').append("<textarea></textarea>").attr("id", "ReplyBox");
+            
+            $('#ReplyBox').keyup(function (e) {
+                if (e.keyCode == 27) {
+                    $('#ReplyBox').remove();
+                }
+
+            });
+        }
+    });
 }
 
 
