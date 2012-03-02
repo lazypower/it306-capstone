@@ -178,7 +178,7 @@ $('document').ready(function () {
  
       if ( e.keyCode === 13 )
       {
-        if ($('input[name=postTitle]').val().length >= 2 && $('textarea[name=postBody').val().length >= 5)
+        if ($('input[name=postTitle]').val().length >= 2 && $('textarea[name=postBody]').val().length >= 5)
         {
           alert("ding!");
         }
