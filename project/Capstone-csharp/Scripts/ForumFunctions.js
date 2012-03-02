@@ -159,7 +159,13 @@ function bindReplyDisplay()
     } );
 }
 
-
+$('input[name=postBody]').keyUp(function(e) 
+    {
+      if ($('input[name=postTitle]').val().length >= 2 && $('input[name=postBody').val().length >= 5)
+      {
+        alert("ding!");
+      }
+    }
 
 // Consider this the constructor - run on page load
 $('document').ready(function () {
