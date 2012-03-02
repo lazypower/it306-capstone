@@ -29,10 +29,12 @@ function postComment(postID, comment) {
 }
 
 
+// Function to append JSON response data to 
+// the DOM. Searches for the closest parent container and fades in the reply.
 function appendReply( data )
 {
-    var rmeta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy ).hide().fadeIn( 2000 );
-    var rbody = $( "<div class='span6 reply'></div>" ).append( data.postBody ).hide().fadeIn( 2000 );
+    var rmeta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy ).hide().fadeIn( 400 );
+    var rbody = $( "<div class='span6 reply'></div>" ).append( data.postBody ).hide().fadeIn( 400 );
     $( '#' + data.parentID + ' .replyscontainer' ).append( rmeta, rbody );
 }
 
