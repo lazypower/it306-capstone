@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Capstone_csharp.Models;
+using MSA = Microsoft.Security.Application;
 
 
 namespace Capstone_csharp.Controllers
@@ -99,6 +101,53 @@ namespace Capstone_csharp.Controllers
             } // close DB connection
         
         }// end get posts
+
+        //[Authorize]
+        //[HttpPost]
+        public ActionResult postComment(int postID, string comment)
+        {
+
+            // Do some data transforms, and encoding
+            comment = MSA.Encoder.HtmlEncode(
+                        // Remove all leading and trailing whitespace from string
+                        comment.Trim()
+                        );
+
+            // Declare our database connection // will exist only in the scope
+            // of the using statement.
+            using (Helpers.DAL.CapstoneEntities db = new Helpers.DAL.CapstoneEntities())
+            {
+                Helpers.DAL.tTopicPost commentPost = new Helpers.DAL.tTopicPost()
+                {
+                    topicParentID = postID,
+                    topicPost = comment,
+                    topicDate = DateTime.Now,
+                    userID = Helpers.HelperQueries.getUserID(User.Identity.Name),
+                    // theres a ridiculous bug here - it wont let me save null
+                    // objects on a nullable field, so set the title to 0
+                    topicTitle = "0"
+                };
+
+                
+                
+
+                db.AddTotTopicPosts(commentPost);
+                db.SaveChanges();
+            }
+
+
+            // This is where data modeling comes in handy. I hate that I have to declare yet ANOTHER model, but hey we cant have our cake and eat it too.
+            ReplyModel returnObject = new ReplyModel()
+            {
+                parentID = postID,
+                postBody = MSA.Encoder.HtmlEncode(comment),
+                postDate = DateTime.Now.ToShortDateString() + " @ " + DateTime.Now.ToShortTimeString(),
+                postedBy = User.Identity.Name
+            };
+
+                return Json(returnObject, JsonRequestBehavior.AllowGet);        
+            
+        }
 
     }
 }
