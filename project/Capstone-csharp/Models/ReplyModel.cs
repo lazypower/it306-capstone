@@ -15,13 +15,13 @@ namespace Capstone_csharp.Models
         public int postID { get; set; }
 
         [DataMember]
-        public int postedBy { get; set; }
+        public string postedBy { get; set; }
 
         [DataMember]
         public string postBody { get; set; }
 
         [DataMember]
-        public DateTime postDate { get; set; }
+        public string postDate { get; set; }
 
         [DataMember]
         public int parentID { get; set; }
