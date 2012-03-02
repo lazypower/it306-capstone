@@ -167,13 +167,24 @@ $('document').ready(function () {
         $('#writerBox').hide();
     }
 
-$('textarea[name=postBody]').keyup(function(e) 
-{
-  if ($('input[name=postTitle]').val().length >= 2 && $('textarea[name=postBody').val().length >= 5)
-  {
-    alert("ding!");
-  }
-});
+    $('textarea[name=postBody]').keyup(function(e) 
+    {
+      if (last_key_pressed == null)
+      {
+        var last_key_pressed = null;
+      }
+ 
+      if ( e.keyCode === 13 )
+      {
+        if ($('input[name=postTitle]').val().length >= 2 && $('textarea[name=postBody').val().length >= 5)
+        {
+          alert("ding!");
+        }
+      }
+
+      last_key_pressed = e.keyCode;
+
+    });
 
 
     // pull the posts via AJAX from the controller method
