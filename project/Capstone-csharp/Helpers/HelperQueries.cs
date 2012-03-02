@@ -34,5 +34,19 @@ namespace Capstone_csharp.Helpers
         }
 
 
-    }
+        public static int getUserID(string name)
+        {
+            using (var db = new Capstone_csharp.Helpers.DAL.CapstoneEntities())
+            {
+                var result = from t in db.tUsers
+                             join o in db.aspnet_Users on t.fk_aspuid equals o.UserId
+                             where o.UserName == name
+                             select t.userID;
+
+                return result.FirstOrDefault();
+            }
+        }
+
+
+    } // end of Helper Queries
 }
