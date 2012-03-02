@@ -167,7 +167,7 @@ $('document').ready(function () {
         $('#writerBox').hide();
     }
 
-$('input[name=postBody]').keyUp(function(e) 
+$('input[name=postBody]').keyup(function(e) 
 {
   if ($('input[name=postTitle]').val().length >= 2 && $('input[name=postBody').val().length >= 5)
   {
