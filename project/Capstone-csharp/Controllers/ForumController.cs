@@ -102,16 +102,14 @@ namespace Capstone_csharp.Controllers
         
         }// end get posts
 
-        //[Authorize]
-        //[HttpPost]
+        [Authorize]
+        [HttpPost]
         public ActionResult postComment(int postID, string comment)
         {
 
             // Do some data transforms, and encoding
-            comment = MSA.Encoder.HtmlEncode(
-                        // Remove all leading and trailing whitespace from string
-                        comment.Trim()
-                        );
+            comment = comment.Trim();
+                      
 
             // Declare our database connection // will exist only in the scope
             // of the using statement.
@@ -147,6 +145,43 @@ namespace Capstone_csharp.Controllers
 
                 return Json(returnObject, JsonRequestBehavior.AllowGet);        
             
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult createPost(string postTitle, string postBody)
+        {
+            // clean up the whitespace
+            postBody = postBody.Trim();
+            postTitle = postTitle.Trim();
+
+           // Declare our database connection // will exist only in the scope
+            // of the using statement.
+            using (Helpers.DAL.CapstoneEntities db = new Helpers.DAL.CapstoneEntities())
+            {
+                Helpers.DAL.tTopicPost newPost = new Helpers.DAL.tTopicPost()
+                {
+                    userID = Helpers.HelperQueries.getUserID(User.Identity.Name),
+                    topicTitle = postTitle,
+                    topicDate = DateTime.Now,
+                    topicPost = postBody
+
+                };
+
+                db.AddTotTopicPosts(newPost);
+                db.SaveChanges();
+
+                object returnData = new
+                {
+                    postID = newPost.topicPostID,
+                    postedBy = User.Identity.Name,
+                    postTitle = postTitle,
+                    postBody = postBody,
+                    postDate = DateTime.Now.ToShortDateString() + " @ " + DateTime.Now.ToShortTimeString()
+                };
+                
+                return Json(returnData, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

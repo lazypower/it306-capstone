@@ -28,6 +28,30 @@ function postComment(postID, comment) {
     
 }
 
+function createPost( postTitle, postBody )
+{
+    $.ajax( {
+        url: "/forum/createPost",
+        type: "POST",
+        data: "postTitle=" + postTitle + "&postBody=" + encodeURI(postBody)
+    } ).done( function ( data )
+    {
+
+        var postcontainer = $( "<div class='span8 postcontainer' id=" + data.postID + "></div>" );
+        var title = $( "<h3 class='hero-title'></h3>" ).append( data.postTitle );
+        var meta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy );
+        var body = $( "<div class='row12'></div>" ).append( data.postBody );
+
+        var replys = $( '<div class="span6 replyscontainer"></div>' );
+
+        $( postcontainer ).append( title, meta, body, replys ).hide().fadeIn(800);
+        // Since we are iterating through these posts in order - and oldest will come first
+        // append the posts to the top of the parent container.
+        $( '#datastream' ).prepend( postcontainer );
+
+    } );
+}
+
 
 // Function to append JSON response data to 
 // the DOM. Searches for the closest parent container and fades in the reply.
@@ -86,11 +110,13 @@ function bindReplyDisplay()
     }
     
     // When you mouse over, display the arrow by appending an icon to the element
-    $('.postcontainer').mouseenter(function () {
-        $(this).find(".hero-title").append('<i class="icon-share-alt"></i>');
-    }).mouseleave(function () { // When you mouse out, remove the icon.
-        $(this).find('.icon-share-alt').remove();
-    });
+    $( '.postcontainer' ).mouseenter( function ()
+    {
+        $( this ).find( ".hero-title" ).append( '<i class="icon-share-alt"></i>' );
+    } ).mouseleave( function ()
+    { // When you mouse out, remove the icon.
+        $( this ).find( '.icon-share-alt' ).remove();
+    } );
 
     $( '.postcontainer' ).click( function ()
     {
@@ -163,30 +189,38 @@ function bindReplyDisplay()
 
 
 // Consider this the constructor - run on page load
-$('document').ready(function () {
+$( 'document' ).ready( function ()
+{
     // be persnickety - if the user is not logged in - dont show them any of the main interaction elements
-    if ($.cookie("Username") === null) {
-        $('#writerBox').hide();
+    if ( $.cookie( "Username" ) === null )
+    {
+        $( '#writerBox' ).hide();
     }
 
-    $('textarea[name=postBody]').keyup(function(e) 
+
+
+
+    $( 'textarea[name=postBody]' ).keyup( function ( e )
     {
-      if (last_key_pressed == null)
-      {
-        var last_key_pressed = null;
-      }
- 
-      if ( e.keyCode === 13 )
-      {
-        if ($('input[name=postTitle]').val().length >= 2 && $('textarea[name=postBody]').val().length >= 5 && last_key_pressed === 13)
+
+        if ( e.keyCode === 13 )
         {
-          alert("ding!");
+            if ( $( 'input[name=postTitle]' ).val().length >= 2 && $( 'textarea[name=postBody]' ).val().length >= 5 && last_key_pressed === 13 )
+            {
+                createPost( $( 'input[name=postTitle]' ).val(), $( 'textarea[name=postBody]' ).val() );
+
+
+                // okay we are building a post - now lets get sneaky with teh UI
+                $( '#write' ).fadeOut( 600 ).delay( 50000 ).fadeIn( 600 );
+                $( 'input[name=postTitle]' ).val( "" );
+                $( 'textarea[name=postBody]' ).val( "" );
+
+            }
         }
-      }
 
-      last_key_pressed = e.keyCode;
+        last_key_pressed = e.keyCode;
 
-    });
+    } );
 
 
     // pull the posts via AJAX from the controller method
@@ -194,9 +228,43 @@ $('document').ready(function () {
 
     // Since this is based off of an ajax call - delay the event call, and bind after the ajax is complete.
     // by encasing the operation in an anonymous function, it works all the way down to IE6. bonus!
-    window.setTimeout(
-        function () {
+    window.setTimeout( 
+        function ()
+        {
             bindReplyDisplay();
-        }, 1000);
+        }, 1000 );
 
-});
+
+    // band a delete button to posts if you're the admin
+    if ( $.cookie( "Username" ) === "Admin" )
+    {
+
+        window.setTimeout( 
+        function ()
+        {
+
+            $( '.postcontainer' ).mouseenter( function ()
+            {
+                $( this ).find( ".hero-title" ).append( '<i class="icon-remove"></i>' ).bind( 'click', function ()
+                {
+                    var displayModal;
+                    displayModal = $( '<div></div>' ).addClass( "modal" ).attr( 'id', "DeleteModal" );
+                    displayModal.append( '<div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Confirm Delete</h3></div>' );
+                    displayModal.append( '<div class="modal-body"><p>One fine body…</p></div>' );
+                    displayModal.append( $('<div class="modal-footer"></div>').append($('<a href="#" class="btn btn-primary">Save changes</a>').bind('click', function() { alert('saved!'); }).append($('<a href="#" class="btn">Close</a>').bind('click',function() {  $('#DeleteModal').modal('toggle'); }) });
+                    
+                    
+                    $( 'body' ).append( displayModal );
+                    $( '#DeleteModal' ).modal( { keyboard: false, show: true, backdrop: true } );
+
+                } );
+
+            } ).mouseleave( function ()
+            { // When you mouse out, remove the icon.
+                $( this ).find( '.icon-remove' ).remove();
+            } );
+
+        }, 1000 );
+    }
+
+} );
