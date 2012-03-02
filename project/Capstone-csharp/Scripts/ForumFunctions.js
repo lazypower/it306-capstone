@@ -169,9 +169,9 @@ $('document').ready(function () {
         $('#writerBox').hide();
     }
 
-$('input[name=postBody]').keyup(function(e) 
+$('textarea[name=postBody]').keyup(function(e) 
 {
-  if ($('input[name=postTitle]').val().length >= 2 && $('input[name=postBody').val().length >= 5)
+  if ($('input[name=postTitle]').val().length >= 2 && $('textarea[name=postBody').val().length >= 5)
   {
     alert("ding!");
   }
