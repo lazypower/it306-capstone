@@ -11,17 +11,21 @@
     <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+    <link href="../../Content/style.css" rel="Stylesheet" type="text/css" />
 
   @Html.Assets().Styles.Render()
 
 </head>
 <body>
     <header>
+        
+        <!--Navigation Bar-->
         <div class="navbar">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="/">Guild Site Framework</a>
                     <ul class="nav">
+                        <li class="divider-vertical"></li>
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                         <li class="divider-vertical"></li>
                         <li>@Html.ActionLink("Forums", "Index", "Forum")</li>
@@ -33,18 +37,21 @@
                         </ul>
                         <ul class="nav pull-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="AccountLeader"> Account <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="AccountLeader"> 
+                            Sign In
+                            <b class="caret"></b></a>
+                            <ul style="width:200;" class="dropdown-menu">
                                 <li id="Account-item1">
-                                    <div id="loginform">
+                                    <div id="loginform" width="300">
                                     <form action="/Account/LogOn" method="post">
                                         <label for="UserName">UserName</label>
-                                        <input data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" placeholder="UserName" />
+                                        <input style="width: 80%; margin-left: 10%;" data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" placeholder="UserName" />
                                         <label for="Password">Password</label>
-                                        <input data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password">
+                                        <input style="width: 80%; margin-left: 10%;" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password">
                                         <script type="text/javascript">document.write("<input type='hidden' name='returnUrl' value='" + document.URL + "' />");</script>
                                         <input type="submit" class="btn-primary" value="Log On">
-                                        <p class="help-block">Not a member? <a href="/Account/Register" class="help-inline">Register</a></p>
+                                        <label style="width:80%; margin-left: 10%;" class="divider"></label>
+                                        <label class="help-block">Not a member? <a href="/Account/Register" class="help-inline">Register</a></label>
                                     </form>
                                     
                                     </div>
@@ -54,13 +61,15 @@
                     </ul>    
                 </div>
             </div>
-        </div>
+        </div> <!-- End Nav Bar -->
     </header>
+
     <section id="main">
         <div class="container">
         @RenderBody()
         </div>
     </section>
+
     <footer>
     </footer>
 
