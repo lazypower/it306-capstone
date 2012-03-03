@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json.Linq;
 // include the DAL namespace - hit its in helpers/dal
 
 
@@ -39,16 +39,13 @@ namespace Capstone_csharp.Controllers
                     userID = Helpers.HelperQueries.getUserID(userName)
                 };
                
+
                 // this tshout now contains everything we need to copy it to
                 // a blank object - that we can JSON encode and return to the browser
                 // and use jquery to append it to he html <Span>
-
-
-                JSONObject shipShout = JSONObject().put(thisShout).toString();
-
-                return Json( JsonObject , JsonRequestBehavior.AllowGet);
+                
             }
-            //return ViewResult;
+            return Json(thisShout, JsonRequestBehavior.AllowGet);
         }
 
         // public method - anyone can read the shouts -- anonymous users may not participate tho.
