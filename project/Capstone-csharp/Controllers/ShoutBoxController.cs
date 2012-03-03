@@ -45,17 +45,25 @@ namespace Capstone_csharp.Controllers
 
 
 
-                return Json(shoutList, JsonRequestBehavior.AllowGet);
+                return Json( JsonObject , JsonRequestBehavior.AllowGet);
             }
             //return ViewResult;
         }
 
+        // public method - anyone can read the shouts -- anonymous users may not participate tho.
         [HttpGet]
-        public ActionResult sendShout(string shoutMessage, string userID)
+        public ActionResult readShout()
         {
+            // create your JSon Object context
             using (var db = new Helpers.DAL.CapstoneEntities())
             {
-               return null;
+             
+                // Linq query
+                //var listOfShouts = from x in db.tShouts
+                //     select x;
+
+                // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
+                // to get them back to the browser in a consistent and human readable way?
             }
         }
     }
