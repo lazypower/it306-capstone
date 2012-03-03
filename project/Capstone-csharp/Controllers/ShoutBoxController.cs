@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 //using Newtonsoft.Json.Linq;
 // include the DAL namespace - hit its in helpers/dal
-
+using Capstone_csharp.Helpers.DAL;
 
 namespace Capstone_csharp.Controllers
 {
@@ -38,8 +38,9 @@ namespace Capstone_csharp.Controllers
                     shoutString = shoutMessage,
                     userID = Helpers.HelperQueries.getUserID(userName)
                 };
-               
 
+                db.SaveChanges();
+                
                 // this tshout now contains everything we need to copy it to
                 // a blank object - that we can JSON encode and return to the browser
                 // and use jquery to append it to he html <Span>
@@ -47,9 +48,9 @@ namespace Capstone_csharp.Controllers
             }
         }
 
-        // public method - anyone can read the shouts -- anonymous users may not participate tho.
+         //public method - anyone can READ
         [HttpGet]
-        public ActionResult readShout()
+        public string readShout()
         {
             // create your JSon Object context
             using (var db = new Helpers.DAL.CapstoneEntities())
@@ -63,9 +64,10 @@ namespace Capstone_csharp.Controllers
 
                 // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
                 // to get them back to the browser in a consistent and human readable way?
-                var result = listOfShouts.ToString();
-
-                return result.FirstOrDefault();
+                var result = listOfShouts.ToList();
+                
+                
+                return result.FirstOrDefault().shoutString.ToString();
             }
         }
     }
