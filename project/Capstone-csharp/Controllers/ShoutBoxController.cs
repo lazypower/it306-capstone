@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json.Linq;
 // include the DAL namespace - hit its in helpers/dal
 
 
@@ -33,21 +33,18 @@ namespace Capstone_csharp.Controllers
             {
                // Declare a new shout - use the Entity Framework object
                // to make this easier use object initialization format
-               //tShout thisShout = new  thisShout()
-               // { 
-               //    shoutString = shoutMessage
-               //    userID = helpers.helperqueries.getUser--?
-               // }
+                Helpers.DAL.tShout thisShout = new Helpers.DAL.tShout()
+                {
+                    shoutString = shoutMessage,
+                    userID = Helpers.HelperQueries.getUserID(userName)
+                };
                
-                // this tshout how contains everythign we need so copy it to
+
+                // this tshout now contains everything we need to copy it to
                 // a blank object - that we can JSON encode and return to the browser
-                // and use jquery to append it to he html <Span> 
-
-
-
-                return Json( JsonObject , JsonRequestBehavior.AllowGet);
+                // and use jquery to append it to he html <Span>
+                return Json(thisShout, JsonRequestBehavior.AllowGet);
             }
-            //return ViewResult;
         }
 
         // public method - anyone can read the shouts -- anonymous users may not participate tho.
@@ -59,11 +56,16 @@ namespace Capstone_csharp.Controllers
             {
              
                 // Linq query
-                //var listOfShouts = from x in db.tShouts
-                //     select x;
+                // var listOfShouts = from x in db.tShouts
+                // select x;
+                var listOfShouts = from x in db.tShouts
+                             select x;
 
                 // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
                 // to get them back to the browser in a consistent and human readable way?
+                var result = listOfShouts.ToString();
+
+                return result.FirstOrDefault();
             }
         }
     }
