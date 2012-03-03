@@ -1,8 +1,39 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿<html>
 
-<h2>@ViewBag.Message</h2>
-<p>
-    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
-</p>
+<head>
+
+    <script type="text/javascript" src="../../js/swfobject/swfobject.js"></script>
+    <script type="text/javascript" src="../../js/flash_detect.js"></script>
+
+    <script type="text/javascript">
+        if (FlashDetect.installed) {
+            var flashvars = {};
+            flashvars.cssSource = "slider/piecemaker.css";
+            flashvars.xmlSource = "slider/piecemaker.xml";
+
+            var params = {};
+            params.play = "true";
+            params.menu = "false";
+            params.scale = "showall";
+            params.wmode = "transparent";
+            params.allowfullscreen = "true";
+            params.allowscriptaccess = "always";
+            params.allownetworking = "all";
+
+            swfobject.embedSWF('slider/piecemaker.swf', 'slider', '620', '400', '10', null, flashvars,
+      params, null);
+        } else {
+            $('#replacement_image').show();
+        }
+    
+    </script>
+</head>
+<body>
+    <div id="slider">
+		<div type="hidden" id="replacement_image">
+			<img src="../../slider/contents/slide1.jpg" style="padding-left: 50px; padding-top: 50px;" alt="Flash not installed n stuff" />
+		</div>
+	</div>
+
+</body>
+</html>
