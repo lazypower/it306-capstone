@@ -43,9 +43,8 @@ namespace Capstone_csharp.Controllers
                 // this tshout now contains everything we need to copy it to
                 // a blank object - that we can JSON encode and return to the browser
                 // and use jquery to append it to he html <Span>
-                
+                return Json(thisShout, JsonRequestBehavior.AllowGet);
             }
-            return Json(thisShout, JsonRequestBehavior.AllowGet);
         }
 
         // public method - anyone can read the shouts -- anonymous users may not participate tho.
@@ -59,9 +58,14 @@ namespace Capstone_csharp.Controllers
                 // Linq query
                 // var listOfShouts = from x in db.tShouts
                 // select x;
+                var listOfShouts = from x in db.tShouts
+                             select x;
 
                 // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
                 // to get them back to the browser in a consistent and human readable way?
+                var result = listOfShouts.ToString();
+
+                return result.FirstOrDefault();
             }
         }
     }
