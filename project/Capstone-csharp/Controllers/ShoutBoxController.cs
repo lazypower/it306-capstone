@@ -48,23 +48,41 @@ namespace Capstone_csharp.Controllers
             }
         }
 
-        // public method - anyone can read the shouts -- anonymous users may not participate tho.
+         //public method - anyone can READ
         [HttpGet]
-        public String readShout()
+        public ActionResult readShout()
         {
             // create your JSon Object context
             using (var db = new Helpers.DAL.CapstoneEntities())
             {
-             
+
                 // Linq query
+                // var listOfShouts = from x in db.tShouts
+                // select x;
                 var listOfShouts = from x in db.tShouts
-                             select x;
+                                   select new
+                                    {
+                                        userID = x.userID,
+                                        shoutString = x.shoutString
+                                    };
 
                 // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
                 // to get them back to the browser in a consistent and human readable way?
-                var result = listOfShouts.ToList();
+                var p = new List<Models.ShoutModel>();
 
-                return result.FirstOrDefault().shoutString.ToString();
+                foreach (var x in listOfShouts)
+                {
+                    var y = new Models.ShoutModel()
+                        {
+                            userID = Helpers.HelperQueries.GetUserName((int)x.userID),
+                            shoutString = x.shoutString
+                        };
+                    p.Add(y);
+                    
+                }
+
+                return Json(p, JsonRequestBehavior.AllowGet);
+
             }
         }
     }
