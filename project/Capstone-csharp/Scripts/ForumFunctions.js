@@ -95,13 +95,13 @@ function appendReplyToParentObject(reply, post)
 function createPost(data)
 {
 
-        var postcontainer = $( "<div class='span8 postcontainer' id=" + data.postID + "></div>" );
+        var postcontainer = $( "<div class='postcontainer' id=" + data.postID + "></div>" );
         var title = $( "<h3 class='hero-title'></h3>" ).append( data.postTitle );
-        var toolbox = $("<span class='span12 toolbox'></span>");
+        var toolbox = $("<span class='toolbox'></span>");
 				var meta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy );
-        var body = $( "<div class='row12'></div>" ).append( data.postBody );
+        var body = $( "<div></div>" ).append( data.postBody );
 
-        var replys = $( '<div class="span6 replyscontainer"></div>' );
+        var replys = $( '<div class="replyscontainer"></div>' );
 
         $( postcontainer ).append( title, toolbox, meta, body, replys ).hide().fadeIn(800);
 				
@@ -118,7 +118,7 @@ function createReply( data )
     // Create a reply container, then fill it with the reply bits for display
 		var reply = $("<div></div>").addClass("reply-div");
 		var rmeta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy ).hide().fadeIn( 400 );
-    var rbody = $( "<div class='span6 reply'></div>" ).append( data.postBody ).hide().fadeIn( 400 );
+    var rbody = $( "<div class='reply'></div>" ).append( data.postBody ).hide().fadeIn( 400 );
     $(reply).append(rmeta, rbody);
 		return reply
 }
