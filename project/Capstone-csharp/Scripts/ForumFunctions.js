@@ -106,7 +106,7 @@ function createPost(data)
 				
 				// append the action to the container before returning
 				bindReplyDisplay(postcontainer);
-
+				bindTrashIcon(postcontainer);
 				return postcontainer;
 }
 
@@ -226,16 +226,36 @@ function bindReplyBoxEvents(postcontainer)
     } );
 }
 
+function bindTrashIcon(postContainer)
+{
+    // Check the site wide cookie thats set after login
+    // Do not display any of the front end elements when
+    // they are not signed in. 
+    if ($.cookie("Username") != "admin")
+    {
+        return;
+    }
+
+		$(postContainer).mouseenter( function ()
+    {
+        $( this ).find( ".hero-title" ).append(
+									$('<i class="icon-trash"></i>').on('click', TrashModalFunctions())
+								);
+    } ).mouseleave( function ()
+    { // When you mouse out, remove the icon.
+        $( this ).find( '.icon-trash' ).remove();
+    } );
+		
 
 
+		return postContainer;
 
+}
 
+function trashModalFunctions(artifact)
+{
 
-
-
-
-
-
+}
 
 
 

@@ -43,7 +43,7 @@
 
  
  <!-- Template for the MOdal Dialogue - will dyanically update for proper display when called -->
-    <div class="modal hide fade in" id="DeleteModalTemplate">
+    <div class="modal hide fade in" id="DeleteModal">
 						<div class="modal-header">
 										<a class="close" data-dismiss="modal">&times;</a>
 										<h3>Confirm Delete</h3>
@@ -55,6 +55,10 @@
 						<a href="#" class="btn">Close</a>
 		</div>
  </div>
+
+ <script>
+	$('#DeleteModal').modal({ backdrop: false, keyboard: false, show: false });
+</script>
 
 <!-- I dont like to do this - but I need to - drop the script in the middle of page to provide all page functions -->
 <style type="text/css">
