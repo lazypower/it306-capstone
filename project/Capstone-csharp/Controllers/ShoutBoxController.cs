@@ -7,6 +7,7 @@ using System.Web.Mvc;
 // include the DAL namespace - hit its in helpers/dal
 using Capstone_csharp.Helpers.DAL;
 
+
 namespace Capstone_csharp.Controllers
 {
     public class ShoutBoxController : Controller
