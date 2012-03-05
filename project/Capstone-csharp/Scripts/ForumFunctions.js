@@ -247,11 +247,13 @@ function bindTrashIcon(postContainer, postID)
 
 function displayTrashModal(artifact, postID)
 {
-	$(artifact).click(function() {
-		
-					$('#DeleteModal').find('.btn-danger').attr('post-id',postID);
+	$(artifact).bind('click', (function() {
+					console.log(postID);
+					$('#postToDelete').val(postID);
 					$('#DeleteModal').modal('toggle');
-	});
+	}));
+
+	
 }
 
 
@@ -277,7 +279,7 @@ function buildStream(data) {
 				// each post has an array of replys - process those
         for (j = 0; j < data[i].Replys.length; j++) {
             appendReplyToParentObject(
-														createReply(data[i].Replys[i]),
+														createReply(data[i].Replys[j]),
 													 	post
 														);
         }
