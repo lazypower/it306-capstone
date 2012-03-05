@@ -3,7 +3,7 @@
 }
 
 #main {
-    width: 878px;
+    width: 876px;
     position: absolute;
     left: 50%;
     margin-left: -439px;
@@ -16,10 +16,10 @@
 {
     
     background: url(../img/mainback.png) repeat-y top center;
-    width: 878px;
-    left: -2px;
+    width: 876px;
     position: relative;
     padding-bottom: 8px;
+    display: block;
 }
 
 #bodycontent
