@@ -97,12 +97,13 @@ function createPost(data)
 
         var postcontainer = $( "<div class='span8 postcontainer' id=" + data.postID + "></div>" );
         var title = $( "<h3 class='hero-title'></h3>" ).append( data.postTitle );
-        var meta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy );
+        var toolbox = $("<span class='span12 toolbox'></span>");
+				var meta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy );
         var body = $( "<div class='row12'></div>" ).append( data.postBody );
 
         var replys = $( '<div class="span6 replyscontainer"></div>' );
 
-        $( postcontainer ).append( title, meta, body, replys ).hide().fadeIn(800);
+        $( postcontainer ).append( title, toolbox, meta, body, replys ).hide().fadeIn(800);
 				
 				// append the action to the container before returning
 				bindReplyDisplay(postcontainer);
@@ -141,13 +142,10 @@ function bindReplyDisplay(postContainer)
         return;
     }
 
-		$(postContainer).mouseenter( function ()
-    {
-        $( this ).find( ".hero-title" ).append( '<i class="icon-share-alt"></i>' );
-    } ).mouseleave( function ()
-    { // When you mouse out, remove the icon.
-        $( this ).find( '.icon-share-alt' ).remove();
-    } );
+        $( postContainer ).find( ".toolbox" ).append( 
+								
+								'<button class="reply-button"><i class="icon-share-alt"></i></button>'
+								);
 		
 		bindReplyBoxEvents(postContainer);
 
@@ -161,7 +159,9 @@ function bindReplyDisplay(postContainer)
 
 function bindReplyBoxEvents(postcontainer)
 {
-    $( postcontainer ).click( function ()
+    var button = $( postcontainer ).find('.reply-button');
+
+		$( button ).click( function ()
     {
 
         if ( last_key_pressed != null )
@@ -177,7 +177,7 @@ function bindReplyBoxEvents(postcontainer)
             
             {
 								//find the container. apply the comment box
-                $( this ).find( '.replyscontainer' )
+                $( postcontainer ).find( '.replyscontainer' )
 									.append( $( "<textarea></textarea>" )
 									.attr( "id", "ReplyBox" )
 									.height( "215px" )
@@ -236,25 +236,20 @@ function bindTrashIcon(postContainer)
         return;
     }
 
-		$(postContainer).mouseenter( function ()
-    {
-        $( this ).find( ".hero-title" ).append(
-									$('<i class="icon-trash"></i>').on('click', TrashModalFunctions())
-								);
-    } ).mouseleave( function ()
-    { // When you mouse out, remove the icon.
-        $( this ).find( '.icon-trash' ).remove();
-    } );
-		
-
+					var button = $('<button class="btn-danger"><i class="icon-trash"></i></button>');
+					button.click(trashModal(button));
+							
+        $( postContainer ).find( ".toolbox" ).append(button);
 
 		return postContainer;
 
 }
 
-function trashModalFunctions(artifact)
+function trashModal(artifact)
 {
-
+	$(artifact).click(function() {
+		$('#DeleteModal').modal('toggle');
+	});
 }
 
 

@@ -4,6 +4,8 @@
 }
 
 <h2>Guild Site Framework Forums</h2>
+
+<!--
 <section id="tabs">
     <div class="pull-right hide span12" id="writerBox">
         <ul class="nav nav-tabs">
@@ -36,7 +38,7 @@
         </div>
     </div>
 </section>
-
+-->
 <div class="span8" id="datastream"> 
 
 </div>
@@ -48,16 +50,18 @@
 										<a class="close" data-dismiss="modal">&times;</a>
 										<h3>Confirm Delete</h3>
 						</div>
-        <div class="modal-body"><p>One fine body…</p></div>
+        <div class="modal-body"><p>Are you sure you want to delete this post?</p></div>
     
 		<div class="modal-footer">
-						<a href="#" class="btn btn-primary">Save changes</a>
-						<a href="#" class="btn">Close</a>
+						<a href="#" class="btn btn-danger">Delete Post</a>
+						<a href="#" class="btn" onClick=" $('#DeleteModal').modal('toggle') ">Close</a>
 		</div>
  </div>
 
  <script>
-	$('#DeleteModal').modal({ backdrop: false, keyboard: false, show: false });
+ 	$(document).ready(function() {
+	  $('#DeleteModal').modal({ backdrop: false, keyboard: false, show: false });
+	}
 </script>
 
 <!-- I dont like to do this - but I need to - drop the script in the middle of page to provide all page functions -->
