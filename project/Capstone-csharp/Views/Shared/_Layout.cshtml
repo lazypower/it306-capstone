@@ -12,13 +12,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
     <link href="../../Content/style.css" rel="Stylesheet" type="text/css" />
-
+    
   @Html.Assets().Styles.Render()
 
 </head>
 <body>
     <header>
-        
         <!--Navigation Bar-->
         <div class="navbar">
             <div class="navbar-inner">
@@ -64,9 +63,28 @@
         </div> <!-- End Nav Bar -->
     </header>
 
+    <!-- Shoutbox -->
+    <div id="sbicon">
+        <img width="34" height="130" src="../../img/shoutboxicon.png" alt="shoutbox" style="display:block;" id="icon" rel="0"/>
+    </div>
+        
+    <div id="sbcontent">
+        
+    </div>
+    <!--Main Content Here -->
     <section id="main">
-        <div class="container">
-        @RenderBody()
+        <div id="maintop">
+            <img style="display:block;" src="../../img/maintop.png" alt="maintop" />
+        </div>
+
+        <div id="mainbody">
+            <div id="bodycontent">
+                @RenderBody()
+            </div>
+        </div>
+        
+        <div id="mainbottom">
+            <img style="display:block;" src="../../img/mainbottom.png" alt="mainbottom" />
         </div>
     </section>
 
@@ -97,6 +115,7 @@
         });
     </script>
 
+    <script src="../../js/shoutbox.js" text/javascript"></script>
     @Html.Assets().Scripts.Render()
 </body>
 </html>
