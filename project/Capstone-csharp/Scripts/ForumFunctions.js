@@ -107,7 +107,7 @@ function createPost(data)
 				
 				// append the action to the container before returning
 				bindReplyDisplay(postcontainer);
-				bindTrashIcon(postcontainer);
+				bindTrashIcon(postcontainer, data.postID);
 				return postcontainer;
 }
 
@@ -226,7 +226,7 @@ function bindReplyBoxEvents(postcontainer)
     } );
 }
 
-function bindTrashIcon(postContainer)
+function bindTrashIcon(postContainer, postID)
 {
     // Check the site wide cookie thats set after login
     // Do not display any of the front end elements when
@@ -237,7 +237,7 @@ function bindTrashIcon(postContainer)
     }
 
 					var button = $('<button class="btn-danger"><i class="icon-trash"></i></button>');
-					button.click(trashModal(button));
+					button.click(displayTrashModal(button), postID);
 							
         $( postContainer ).find( ".toolbox" ).append(button);
 
@@ -245,10 +245,12 @@ function bindTrashIcon(postContainer)
 
 }
 
-function trashModal(artifact)
+function displayTrashModal(artifact, postID)
 {
 	$(artifact).click(function() {
-		$('#DeleteModal').modal('toggle');
+		
+					$('#DeleteModal').find('.btn-danger').attr('post-id',postID);
+					$('#DeleteModal').modal('toggle');
 	});
 }
 
