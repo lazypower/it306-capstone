@@ -25,6 +25,7 @@
 #bodycontent
 {
     padding-left: 50px;
+    padding-right: 50px;
 }
 
 #slider 
@@ -40,16 +41,48 @@
     right: 0px;
     top: 50%;
     margin-top: -80px;
+    z-index: 10;
 }
 
 #sbcontent
 {
+    background:url(../img/cb_back.png) no-repeat;
     position:fixed;
-    top: 50%;
     right: -305px;
-    margin-top: -250px;
     width: 300px;
-    height: 500px;
-    background: #000;
+    height: 600px;
     border: 2px solid #fff;
+    z-index: 9;
+    top: 50%;
+    margin-top: -300px;
+}
+
+#chatboxinput 
+{
+    position: absolute;
+    bottom: 0px;
+    height: 100px;
+    width: 100%;
+}
+
+#chatbox 
+{
+    margin-left: 20px;
+    margin-top: 18px;
+    width: 259px;
+    height: 478px;
+}
+
+#inputthis 
+{
+    resize: none;
+    margin-left: 18px;
+    margin-top: 16px;
+    color: #000;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1em;
+    width: 250px;
+    overflow: hidden;
+    border: none;
 }
