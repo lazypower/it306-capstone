@@ -1,17 +1,11 @@
 ﻿@{
     ViewBag.Title = "Forums";
     Html.Assets().Scripts.Add("/Scripts/ForumFunctions.js");
-    
 }
-
-<script>
-viewData("ShoutBoxJSON") = Json(ListOfShoutModels);
-var ShoutBoxJson = @ViewData["x"]
-</script>
 
 <h2>Guild Site Framework Forums</h2>
 
-<section id="tabs" class="span10">
+<section id="tabs" class="span9">
     <div class="hide" id="writerBox">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#search" data-toggle="tab"><i class="icon-search"></i>Filter</a></li>
@@ -62,24 +56,5 @@ var ShoutBoxJson = @ViewData["x"]
 		</div>
  </div>
 
-<style type="text/css">
-    
-    .postcontainer 
-    {
-		margin-bottom: 20px;
-		margin-right: 50px;
-    }
-    
-    .reply
-    {
-		padding-right: 100px;
-		margin-bottom: 10px;
-    }
-    
-    .reply-container
-	{
-		margin-left: 20px;
-	}
-</style>
 
 </div>

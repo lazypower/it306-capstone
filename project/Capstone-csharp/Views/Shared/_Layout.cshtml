@@ -1,7 +1,9 @@
 ﻿@{
     Html.Assets().Scripts.Add("/Scripts/SiteFunctions.js");
+    Html.Assets().Scripts.Add("/Scripts/ShoutBox.js");
     Html.Assets().Scripts.Add("/Content/bootstrap/js/bootstrap.min.js");
     Html.Assets().Scripts.Add("/Scripts/jquery.cookie.js");
+    Html.Assets().Scripts.Add("/Scripts/jorder.js");
 }
 <!DOCTYPE html>
 <html>
@@ -9,6 +11,7 @@
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
     <link href="@Url.Content("~/Content/bootstrap/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Forum.css")" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
     <link href="../../Content/style.css" rel="Stylesheet" type="text/css" />
@@ -121,5 +124,9 @@
 
     <script src="../../js/shoutbox.js" text/javascript"></script>
     @Html.Assets().Scripts.Render()
+
+    <script>
+     var ShoutData =  @Html.Raw(Capstone_csharp.Helpers.ShoutBoxJson.FetchShoutBoxJson())
+    </script>
 </body>
 </html>

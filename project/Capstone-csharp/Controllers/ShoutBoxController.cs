@@ -17,10 +17,13 @@ namespace Capstone_csharp.Controllers
 
         public ActionResult Index()
         {
-            return View();
+
+                
+                return View();
         }
 
-        [HttpGet]
+        [Authorize]
+        [HttpPost]
         // set this to require authorization
         public ActionResult createShout(string shoutMessage)
         {
@@ -39,7 +42,9 @@ namespace Capstone_csharp.Controllers
                     shoutString = shoutMessage,
                     userID = Helpers.HelperQueries.getUserID(userName)
                 };
-               
+
+                db.AddTotShouts(thisShout);
+                db.SaveChanges();
 
                 // this tshout now contains everything we need to copy it to
                 // a blank object - that we can JSON encode and return to the browser
@@ -55,35 +60,39 @@ namespace Capstone_csharp.Controllers
             // create your JSon Object context
             using (var db = new Helpers.DAL.CapstoneEntities())
             {
-
                 // Linq query
                 // var listOfShouts = from x in db.tShouts
                 // select x;
                 var listOfShouts = from x in db.tShouts
-                                   select new
-                                    {
-                                        userID = x.userID,
-                                        shoutString = x.shoutString
-                                    };
+                                   select x;
+                                   
+                                   /*new Models.ShoutModel()
+                                   {
+                                       // This is stupid - entity framework until its fully assigned says ?int 
+                                       // and i said " Look bitch, its an int. GTFO" -- seems needless i know
+                                       // but it worked. Pseudo objects blow under certain circumstances
+                                       userID = String.Format("{0}", x.userID),
+                                       shoutString = x.shoutString
+                                   };*/
 
-                // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
-                // to get them back to the browser in a consistent and human readable way?
+
+                // You have a list of shouts, iterate through them and add them to the return object
                 var p = new List<Models.ShoutModel>();
-                viewData("ShoutBoxJSON") = Json(ListOfShoutModels);
-                foreach (var x in listOfShouts)
+                foreach (var shout in listOfShouts)
                 {
                     var y = new Models.ShoutModel()
-                        {
-                            userID = Helpers.HelperQueries.GetUserName((int)x.userID),
-                            shoutString = x.shoutString
-                        };
+                    {
+                        shoutString = shout.shoutString,
+                        userID = Helpers.HelperQueries.GetUserName((int)shout.userID)
+                    };
+
                     p.Add(y);
-                    
                 }
 
-                viewData("ShoutBoxJSON")=Json(p);
-                return Json(p, JsonRequestBehavior.AllowGet);
 
+                // return JSON
+                return Json(p, JsonRequestBehavior.AllowGet);
+                
             }
         }
     }

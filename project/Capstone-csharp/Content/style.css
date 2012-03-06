@@ -71,6 +71,8 @@
     margin-top: 18px;
     width: 259px;
     height: 478px;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 #inputthis 
@@ -85,4 +87,9 @@
     width: 250px;
     overflow: hidden;
     border: none;
+}
+
+#chatbox h6
+{
+    color: #24336b;
 }
