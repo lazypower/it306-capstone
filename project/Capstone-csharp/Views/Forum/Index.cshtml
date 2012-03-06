@@ -1,7 +1,13 @@
 ﻿@{
     ViewBag.Title = "Forums";
     Html.Assets().Scripts.Add("/Scripts/ForumFunctions.js");
+    
 }
+
+<script>
+viewData("ShoutBoxJSON") = Json(ListOfShoutModels);
+var ShoutBoxJson = @ViewData["x"]
+</script>
 
 <h2>Guild Site Framework Forums</h2>
 

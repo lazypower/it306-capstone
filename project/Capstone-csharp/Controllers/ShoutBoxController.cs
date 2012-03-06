@@ -69,7 +69,7 @@ namespace Capstone_csharp.Controllers
                 // listOfShouts is now a loaded collection of all the shouts in the table. what do you do with them
                 // to get them back to the browser in a consistent and human readable way?
                 var p = new List<Models.ShoutModel>();
-
+                viewData("ShoutBoxJSON") = Json(ListOfShoutModels);
                 foreach (var x in listOfShouts)
                 {
                     var y = new Models.ShoutModel()
@@ -81,6 +81,7 @@ namespace Capstone_csharp.Controllers
                     
                 }
 
+                viewData("ShoutBoxJSON")=Json(p);
                 return Json(p, JsonRequestBehavior.AllowGet);
 
             }
