@@ -1,2 +1,55 @@
 ﻿body {
+    background: #000 url(../img/background.jpg) repeat-x top left;
+}
+
+#main {
+    width: 876px;
+    position: absolute;
+    left: 50%;
+    margin-left: -439px;
+    /*margin-left: auto;
+    margin-right: auto;*/
+     
+}
+
+#mainbody 
+{
+    
+    background: url(../img/mainback.png) repeat-y top center;
+    width: 876px;
+    position: relative;
+    padding-bottom: 8px;
+    display: block;
+}
+
+#bodycontent
+{
+    padding-left: 50px;
+}
+
+#slider 
+{
+    margin-left: 120px;
+}
+
+#sbicon
+{
+    position: fixed;
+    width: 34px;
+    height: 130px;
+    right: 0px;
+    top: 50%;
+    margin-top: -80px;
+}
+
+#sbcontent
+{
+    position:fixed;
+    top: 50%;
+    right: -305px;
+    margin-top: -250px;
+    width: 300px;
+    height: 500px;
+    background: #000;
+    border: 2px solid #fff;
 }

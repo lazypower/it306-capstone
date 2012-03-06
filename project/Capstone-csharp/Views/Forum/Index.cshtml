@@ -4,8 +4,9 @@
 }
 
 <h2>Guild Site Framework Forums</h2>
+
 <section id="tabs">
-    <div class="pull-right span12" id="writerBox">
+    <div class="hide" id="writerBox">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#search" data-toggle="tab"><i class="icon-search"></i>Filter</a></li>
             <li><a href="#write" data-toggle="tab"><i class="icon-pencil"></i>Compose</a></li>
@@ -36,37 +37,42 @@
         </div>
     </div>
 </section>
+<div id="datastream"> 
 
-<div class="span8" id="datastream"> 
 
-</div>
 
  
- <!-- I'm cheating using page DOM templates. dont remove unless you want the delete modal to go away -->
- <div style="display: none;">
-
-    <div class="modal" id="DeleteModalTemplate">
-        <div class="modal-header"><a class="close" data-dismiss="modal">&times;</a><h3>Confirm Delete</h3></div>
-        <div class="modal-body"><p>One fine body…</p></div>
-    </div>
+    <div class="modal hide fade in" id="DeleteModal">
+						<div class="modal-header">
+										<a class="close" data-dismiss="modal">&times;</a>
+										<h3>Confirm Delete</h3>
+						</div>
+        <div class="modal-body"><p>Are you sure you want to delete this post?</p></div>
     
-    ' );
-    displayModal.append( $('<div class="modal-footer"></div>').append($('<a href="#" class="btn btn-primary">Save changes</a>').bind('click', function() { alert('saved!'); }).append($('<a href="#" class="btn">Close</a>').bind('click',function() {  $('#DeleteModal').modal('toggle'); }) });
-                    
-
+		<div class="modal-footer">
+						<a href="#" class="btn btn-danger">Delete Post</a>
+						<a href="#" class="btn" onClick=" $('#DeleteModal').modal('toggle') ">Close</a>
+		</div>
  </div>
 
-<!-- I dont like to do this - but I need to - drop the script in the middle of page to provide all page functions -->
+ <script>
+</script>
+
 <style type="text/css">
     .postcontainer 
     {
-        margin-bottom: 20px;
+						margin-bottom: 20px;
+						margin-right: 50px;
     }
     .reply
     {
-        margin-bottom: 10px;
+				padding-right: 100px;
+				margin-bottom: 10px;
     }
-
+		.reply-container
+		{
+				margin-left: 20px;
+		}
 </style>
 
-
+</div>

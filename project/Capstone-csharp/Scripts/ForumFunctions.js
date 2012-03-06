@@ -1,4 +1,16 @@
-﻿
+﻿/* ===================================================
+ * Contains all of the events, server communication
+ * and functionality of the Forums - without this it
+ * does mostly nothing.
+ * ==================================================== */
+
+
+
+
+/* ===================================================== 
+ * AJAX CALLS - all of the server communication bits
+ * ===================================================== */
+
 
 // do the ajax call to grab ALL the posts
 function getPosts() {
@@ -9,6 +21,21 @@ function getPosts() {
             buildStream(data);
         }
     });
+}
+
+function postCreatedPost(postTitle, postBody)
+{
+    $.ajax( {
+        url: "/forum/createPost",
+        type: "POST",
+        data: "postTitle=" + postTitle + "&postBody=" + encodeURI(postBody)
+    } ).done( function ( data )
+    {
+        // Since we are iterating through these posts in order - and oldest will come first
+        // append the posts to the top of the parent container.
+        appendToDataStream(createPost(data));
+
+    } );
 }
 
 
@@ -23,83 +50,89 @@ function postComment(postID, comment) {
         data: "postID=" + postID + "&comment=" + encodeURI( comment )
     } ).done( function ( data )
     {
-        appendReply( data );
+        appendReplyToParentContainer( data, postID );
     } );
     
 }
 
-function createPost( postTitle, postBody )
-{
-    $.ajax( {
-        url: "/forum/createPost",
-        type: "POST",
-        data: "postTitle=" + postTitle + "&postBody=" + encodeURI(postBody)
-    } ).done( function ( data )
-    {
+function deletePost(postID) {
+		$.ajax({
+		 url: "/forum/deletePost",
+		 type: "POST",
+		 data: "postID=" + postID
+		}).done(function(data)
+		{
+			alert('deleted post');
+		});
+}
 
-        var postcontainer = $( "<div class='span8 postcontainer' id=" + data.postID + "></div>" );
+/* ===========================================================================
+ *  DOM appendage 
+ *  ========================================================================== */
+
+function appendToDataStream(artifact)
+{
+	$('#datastream').prepend(artifact);
+}
+
+function appendReplyToParentContainer(reply, postID)
+{
+	var parentContainer = $('#' + postID);
+	parentContainer.append(createReply(reply));
+}
+
+/* =============================================================================
+ * Object Factory
+ * ============================================================================= */
+
+function appendReplyToParentObject(reply, post)
+{
+	var replyContainer = $(post).find('.replyscontainer');
+	$(replyContainer).append(reply);
+	return post;
+}
+
+function createPost(data)
+{
+
+        var postcontainer = $( "<div class='postcontainer' id=" + data.postID + "></div>" );
         var title = $( "<h3 class='hero-title'></h3>" ).append( data.postTitle );
-        var meta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy );
-        var body = $( "<div class='row12'></div>" ).append( data.postBody );
+        var toolbox = $("<span class='toolbox'></span>");
+				var meta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy );
+        var body = $( "<div></div>" ).append( data.postBody );
 
-        var replys = $( '<div class="span6 replyscontainer"></div>' );
+        var replys = $( '<div class="replyscontainer"></div>' );
 
-        $( postcontainer ).append( title, meta, body, replys ).hide().fadeIn(800);
-        // Since we are iterating through these posts in order - and oldest will come first
-        // append the posts to the top of the parent container.
-        $( '#datastream' ).prepend( postcontainer );
-
-    } );
+        $( postcontainer ).append( title, toolbox, meta, body, replys ).hide().fadeIn(800);
+				
+				// append the action to the container before returning
+				bindReplyDisplay(postcontainer);
+				bindTrashIcon(postcontainer, data.postID);
+				return postcontainer;
 }
 
 
-// Function to append JSON response data to 
-// the DOM. Searches for the closest parent container and fades in the reply.
-function appendReply( data )
+
+function createReply( data )
 {
-    var rmeta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy ).hide().fadeIn( 400 );
-    var rbody = $( "<div class='span6 reply'></div>" ).append( data.postBody ).hide().fadeIn( 400 );
-    $( '#' + data.parentID + ' .replyscontainer' ).append( rmeta, rbody );
+    // Create a reply container, then fill it with the reply bits for display
+		var reply = $("<div></div>").addClass("reply-div");
+		var rmeta = $( "<h6></h6>" ).append( data.postDate + " - " + data.postedBy ).hide().fadeIn( 400 );
+    var rbody = $( "<div class='reply'></div>" ).append( data.postBody ).hide().fadeIn( 400 );
+    $(reply).append(rmeta, rbody);
+		return reply
 }
 
 
-// Build the full data-stream of posts
-function buildStream(data) {
-    // If we have no data - do nothing
-    if (data.length === 0) {
-        return null;
-    }
-    // Load the data into Javascript Objects
-    data = JSON.parse(data);
 
-    // Build out a post
-    // Use generic classes and bootstrap dimensions so it scales on all resolutions
-    for (i = 0; i < data.length; i++) {
-        var postcontainer = $("<div class='span8 postcontainer' id=" + data[i].postID + "></div>");
-        var title = $("<h3 class='hero-title'></h3>").append(data[i].postTitle);
-        var meta = $("<h6></h6>").append(data[i].postDate + " - " + data[i].postedBy);
-        var body = $("<div class='row12'></div>").append(data[i].postBody);
+/* ==================================================================================
+ * In page events - bind actions to different elements for interactivity
+ * ================================================================================== */
 
-        var replys = $('<div class="span6 replyscontainer"></div>');
-
-        for (j = 0; j < data[i].Replys.length; j++) {
-            var rmeta = $("<h6></h6>").append(data[i].Replys[j].postDate + " - " + data[i].Replys[j].postedBy);
-            var rbody = $("<div class='span6 reply'></div>").append(data[i].Replys[j].postBody);
-            replys.append( rmeta, rbody );
-        }
-
-
-        $(postcontainer).append(title, meta, body, replys);
-        // Since we are iterating through these posts in order - and oldest will come first
-        // append the posts to the top of the parent container.
-        $('#datastream').prepend(postcontainer);
-    }
-}
 
 // Event to display the "click to add reply"
 // simply shows an overlay arrow on the post title.
-
-function bindReplyDisplay() 
+function bindReplyDisplay(postContainer)
 {
     // Check the site wide cookie thats set after login
     // Do not display any of the front end elements when
@@ -108,50 +141,58 @@ function bindReplyDisplay()
     {
         return;
     }
-    
-    // When you mouse over, display the arrow by appending an icon to the element
-    $( '.postcontainer' ).mouseenter( function ()
-    {
-        $( this ).find( ".hero-title" ).append( '<i class="icon-share-alt"></i>' );
-    } ).mouseleave( function ()
-    { // When you mouse out, remove the icon.
-        $( this ).find( '.icon-share-alt' ).remove();
-    } );
 
-    $( '.postcontainer' ).click( function ()
+        $( postContainer ).find( ".toolbox" ).append( 
+								
+								'<button class="reply-button"><i class="icon-share-alt"></i></button>'
+								);
+		
+		bindReplyBoxEvents(postContainer);
+
+		return postContainer;
+}
+
+
+
+// Event to display the "click to add reply"
+// simply shows an overlay arrow on the post title.
+
+function bindReplyBoxEvents(postcontainer)
+{
+    var button = $( postcontainer ).find('.reply-button');
+
+		$( button ).click( function ()
     {
 
         if ( last_key_pressed != null )
         {
             var last_key_pressed;
         }
-        //console.log($(this).find('.replyscontainer').find('#ReplyBox').length); // Locate the current post's comment/reply container
 
-
-
-        // Since the stupid ! operator wasnt workign as expected, hack it and do yoda notation
-        // If it doesnt have one - do nothing.
-        if ( $( '#ReplyBox' ).length <= 0 )
-        {
-            // ok, we're in the reply container. Display a textbox for the comment body
-            if ( $( '.replyscontainer textarea' ).length <= 0 )
+        // If the ReplyBox is on the page, dont display it again.
+        if ( $( '#ReplyBox' ).length != 0 )
+				{
+					return;
+				}
+            
             {
-                $( this ).find( '.replyscontainer' ).append( $( "<textarea></textarea>" ).attr( "id", "ReplyBox" ).height( "215px" ).width( "455px" ) );
-                $( '.replyscontainer textarea' ).focus();
+								//find the container. apply the comment box
+                $( postcontainer ).find( '.replyscontainer' )
+									.append( $( "<textarea></textarea>" )
+									.attr( "id", "ReplyBox" )
+									.height( "215px" )
+									.width( "455px" )
+								 	);
+                
+								$( '.replyscontainer textarea' ).focus();
 
 
-                // To keep the UI clean, dont use buttons.
                 // This is an event binder, and it fires after the user
                 // presses a key. 
                 $( '#ReplyBox' ).keyup( function ( e )
                 {
-                    //Handy to have when binding key events and you want more than one keypress
-
-
                     // Enter key // If the contents of the textarea is not null
                     // and the enter key is pressed twice - submit the data 
-
-
                     if ( e.keyCode === 13 )
                     {
 
@@ -168,8 +209,6 @@ function bindReplyDisplay()
                             postComment( postID, comment );
 
                         }
-
-
                     }
 
 
@@ -181,90 +220,119 @@ function bindReplyDisplay()
 
                     // Assign after we have completed everything so we get an accurate capture of the last keypress
                     last_key_pressed = e.keyCode;
-                } );
+                } ); 
             }
-        }
+        
     } );
 }
 
+function bindTrashIcon(postContainer, postID)
+{
+    // Check the site wide cookie thats set after login
+    // Do not display any of the front end elements when
+    // they are not signed in. 
+    if ($.cookie("Username") != "admin")
+    {
+        return;
+    }
+
+					var button = $('<button class="btn-danger"><i class="icon-trash"></i></button>');
+					button.click(displayTrashModal(button), postID);
+							
+        $( postContainer ).find( ".toolbox" ).append(button);
+
+		return postContainer;
+
+}
+
+function displayTrashModal(artifact, postID)
+{
+	$(artifact).bind('click', (function() {
+					console.log(postID);
+					$('#postToDelete').val(postID);
+					$('#DeleteModal').modal('toggle');
+	}));
+
+	
+}
+
+
+
+/* ===================================================================================
+ * Page initialization 
+ * =================================================================================== */
+
+
+// Build the full data-stream of posts
+function buildStream(data) {
+    // If we have no data - do nothing
+    if (data.length === 0) {
+        return null;
+    }
+    // Load the data into Javascript Objects
+    data = JSON.parse(data);
+
+    for (i = 0; i < data.length; i++) {
+				
+				var post = createPost(data[i]);
+
+				// each post has an array of replys - process those
+        for (j = 0; j < data[i].Replys.length; j++) {
+            appendReplyToParentObject(
+														createReply(data[i].Replys[j]),
+													 	post
+														);
+        }
+			appendToDataStream(post);
+    }
+}
+
+function initializePage()
+{
+    // be persnickety - if the user is not logged in - dont show them any of the main interaction elements
+    if ( $.cookie( "Username" ) != null )
+    {
+        $( '#writerBox' ).show();
+    	
+			// anonymous function to bind interactivity to the Compose new post elements
+				
+				$( 'textarea[name=postBody]' ).keyup( function ( e ) {
+							if ( e.keyCode === 13 ){
+           		 
+										if ( $( 'input[name=postTitle]' ).val().length >= 2 
+										&& $( 'textarea[name=postBody]' ).val().length >= 5
+									 	&& last_key_pressed === 13 )
+            				{
+                			postCreatedPost( $( 'input[name=postTitle]' ).val(), $( 'textarea[name=postBody]' ).val() );
+
+
+											// okay we are building a post - now lets get sneaky with teh UI
+											$( '#write' ).fadeOut( 600 ).delay( 50000 ).fadeIn( 600 );
+											$( 'input[name=postTitle]' ).val( "" );
+											$( 'textarea[name=postBody]' ).val( "" );
+
+										}
+        				}
+
+        		last_key_pressed = e.keyCode;
+
+			});
+		}
+}
 
 // Consider this the constructor - run on page load
 $( 'document' ).ready( function ()
 {
-    // be persnickety - if the user is not logged in - dont show them any of the main interaction elements
-    if ( $.cookie( "Username" ) === null )
-    {
-        $( '#writerBox' ).hide();
-    }
 
+	initializePage();
 
+	// pull the posts via AJAX from the controller method
+  getPosts();
 
-
-    $( 'textarea[name=postBody]' ).keyup( function ( e )
-    {
-
-        if ( e.keyCode === 13 )
-        {
-            if ( $( 'input[name=postTitle]' ).val().length >= 2 && $( 'textarea[name=postBody]' ).val().length >= 5 && last_key_pressed === 13 )
-            {
-                createPost( $( 'input[name=postTitle]' ).val(), $( 'textarea[name=postBody]' ).val() );
-
-
-                // okay we are building a post - now lets get sneaky with teh UI
-                $( '#write' ).fadeOut( 600 ).delay( 50000 ).fadeIn( 600 );
-                $( 'input[name=postTitle]' ).val( "" );
-                $( 'textarea[name=postBody]' ).val( "" );
-
-            }
-        }
-
-        last_key_pressed = e.keyCode;
-
-    } );
-
-
-    // pull the posts via AJAX from the controller method
-    getPosts();
-
-    // Since this is based off of an ajax call - delay the event call, and bind after the ajax is complete.
-    // by encasing the operation in an anonymous function, it works all the way down to IE6. bonus!
-    window.setTimeout( 
-        function ()
-        {
-            bindReplyDisplay();
-        }, 1000 );
-
-
-    // band a delete button to posts if you're the admin
-    if ( $.cookie( "Username" ) === "Admin" )
-    {
-
-        window.setTimeout( 
-        function ()
-        {
-
-            $( '.postcontainer' ).mouseenter( function ()
-            {
-                $( this ).find( ".hero-title" ).append( '<i class="icon-remove"></i>' ).bind( 'click', function ()
-                {
-                    var displayModal;
-                    displayModal = $( '<div></div>' ).addClass( "modal" ).attr( 'id', "DeleteModal" );
-                    displayModal.append( '<div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>Confirm Delete</h3></div>' );
-                    displayModal.append( '<div class="modal-body"><p>One fine body…</p></div>' );
-                    displayModal.append( $('<div class="modal-footer"></div>').append($('<a href="#" class="btn btn-primary">Save changes</a>').bind('click', function() { alert('saved!'); }).append($('<a href="#" class="btn">Close</a>').bind('click',function() {  $('#DeleteModal').modal('toggle'); }) });
-                    
-                    
-                    $( 'body' ).append( displayModal );
-                    $( '#DeleteModal' ).modal( { keyboard: false, show: true, backdrop: true } );
-
-                } );
-
-            } ).mouseleave( function ()
-            { // When you mouse out, remove the icon.
-                $( this ).find( '.icon-remove' ).remove();
-            } );
-
-        }, 1000 );
-    }
 
 } );
+
+
+
+
+

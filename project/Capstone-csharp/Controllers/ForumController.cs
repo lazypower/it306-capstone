@@ -184,6 +184,14 @@ namespace Capstone_csharp.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult deletePost(int postID)
+        {
+            return Json(postID);
+        }
+
+
     }
 }
 
