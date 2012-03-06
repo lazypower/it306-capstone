@@ -62,9 +62,19 @@ function deletePost(postID) {
 		 data: "postID=" + postID
 		}).done(function(data)
 		{
-			alert('deleted post');
+			cleanupDelete(postID);
 		});
 }
+
+/* ===========================================================================
+ * DOM Deletion
+ * ==========================================================================*/
+
+	function cleanupDelete(postID)
+	{
+		$('#DeleteModal').modal('toggle');
+		$('#' + postID).fadeOut(400).delay(400).remove();
+	}
 
 /* ===========================================================================
  *  DOM appendage 
@@ -235,26 +245,27 @@ function bindTrashIcon(postContainer, postID)
     {
         return;
     }
-
-					var button = $('<button class="btn-danger"><i class="icon-trash"></i></button>');
-					button.click(displayTrashModal(button), postID);
-							
+					var button = $('<button class="btn-danger"><i class="icon-trash"></i></button>').attr('postID',postID);
+					$(button).click(displayTrashModal(button, postID));
         $( postContainer ).find( ".toolbox" ).append(button);
-
+				$('#postToDelete').val(postID);
 		return postContainer;
 
 }
 
 function displayTrashModal(artifact, postID)
 {
+	
 	$(artifact).bind('click', (function() {
-					console.log(postID);
-					$('#postToDelete').val(postID);
+					
 					$('#DeleteModal').modal('toggle');
 	}));
 
 	
 }
+
+
+
 
 
 
@@ -305,12 +316,11 @@ function initializePage()
             				{
                 			postCreatedPost( $( 'input[name=postTitle]' ).val(), $( 'textarea[name=postBody]' ).val() );
 
-
-											// okay we are building a post - now lets get sneaky with teh UI
-											$( '#write' ).fadeOut( 600 ).delay( 50000 ).fadeIn( 600 );
+											
+											//$( '#write' ).fadeOut( 600 ).delay( 50000 ).fadeIn( 600 );
 											$( 'input[name=postTitle]' ).val( "" );
 											$( 'textarea[name=postBody]' ).val( "" );
-
+											
 										}
         				}
 
@@ -329,6 +339,11 @@ $( 'document' ).ready( function ()
 	// pull the posts via AJAX from the controller method
   getPosts();
 
+	// Initialize the Delete Button clickEvent
+	$('#btnDeletePost').click(function() {
+			postID = $('#postToDelete').val();
+			deletePost(postID);
+	});
 
 } );
 

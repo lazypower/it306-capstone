@@ -5,7 +5,7 @@
 
 <h2>Guild Site Framework Forums</h2>
 
-<section id="tabs">
+<section id="tabs" class="span10">
     <div class="hide" id="writerBox">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#search" data-toggle="tab"><i class="icon-search"></i>Filter</a></li>
@@ -50,13 +50,11 @@
         <div class="modal-body"><p>Are you sure you want to delete this post?</p></div>
     
 		<div class="modal-footer">
-						<a href="#" class="btn btn-danger">Delete Post</a>
-						<a href="#" class="btn" onClick=" $('#DeleteModal').modal('toggle') ">Close</a>
+						<input type="hidden" id='postToDelete'>
+						<a href="#"  id="btnDeletePost" class="btn btn-danger">Delete Post</a>
+						<a href="#" class="btn"  onClick=" $('#DeleteModal').modal('toggle') ">Close</a>
 		</div>
  </div>
-
- <script>
-</script>
 
 <style type="text/css">
     .postcontainer 

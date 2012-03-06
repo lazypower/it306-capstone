@@ -184,10 +184,43 @@ namespace Capstone_csharp.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost]
+        
         public ActionResult deletePost(int postID)
         {
+
+            using (Helpers.DAL.CapstoneEntities db = new Helpers.DAL.CapstoneEntities())
+            {
+                var replies = from x in db.tTopicPosts
+                        where (x.topicParentID == postID)
+                        select x;
+
+                foreach(var reply in replies)
+                {
+                    
+                    // attach it back to the table (?) i know this is dumb
+                    db.CreateObjectSet<Helpers.DAL.tTopicPost>().Attach(reply);
+
+                    // Delete it
+                    db.ObjectStateManager.ChangeObjectState(reply, System.Data.EntityState.Deleted);
+                    
+                }
+                
+
+                // this is a bit of mojo to delete a post without a stored proc
+                var post = new Helpers.DAL.tTopicPost();
+
+                // create a post, assign its id
+                post.topicPostID = postID;
+
+                // attach it back to the table (?) i know this is dumb
+                db.CreateObjectSet<Helpers.DAL.tTopicPost>().Attach(post);
+
+                // Delete it
+                db.ObjectStateManager.ChangeObjectState(post, System.Data.EntityState.Deleted);
+                db.SaveChanges();
+                    
+            };
+
             return Json(postID);
         }
 
