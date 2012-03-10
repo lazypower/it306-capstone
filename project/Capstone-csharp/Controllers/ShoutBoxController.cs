@@ -46,10 +46,17 @@ namespace Capstone_csharp.Controllers
                 db.AddTotShouts(thisShout);
                 db.SaveChanges();
 
+                var returnShout = new Models.ShoutModel()
+                {
+                    shoutString = thisShout.shoutString,
+                    userID = Helpers.HelperQueries.GetUserName((int)thisShout.userID)
+                };
+
+
                 // this tshout now contains everything we need to copy it to
                 // a blank object - that we can JSON encode and return to the browser
                 // and use jquery to append it to he html <Span>
-                return Json(thisShout, JsonRequestBehavior.AllowGet);
+                return Json(returnShout, JsonRequestBehavior.AllowGet);
             }
         }
 

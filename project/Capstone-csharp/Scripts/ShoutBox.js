@@ -144,7 +144,7 @@ function checkIfNewShouts(data)
 // appends the mismatched items into the chatbox
 function updateChat(data, cachedData)
 {
-	var shouts = jOrder(cachedData).index('cachedData', ['shoutString']);	
+    var shouts = jOrder( cachedData ).index( 'cachedData', ['shoutString'], {    grouped: true } );	
   console.log(shouts);
 
 	for (var i = 0; i < data.length; ++i)
